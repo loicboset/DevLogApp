@@ -27,9 +27,9 @@ import invariant from '../utils/invariant';
 type SerializedCollapsibleTitleNode = SerializedElementNode;
 
 type TitleConversionDetails = {
-  conversion: () => DOMConversionOutput | null
-  priority: 0 | 1 | 2 | 3 | 4 | undefined
-}
+  conversion: () => DOMConversionOutput | null;
+  priority: 0 | 1 | 2 | 3 | 4 | undefined;
+};
 
 export function $convertSummaryElement(): DOMConversionOutput | null {
   const node = $createCollapsibleTitleNode();
@@ -58,7 +58,7 @@ export class CollapsibleTitleNode extends ElementNode {
             $isCollapsibleContainerNode(collapsibleContainer),
             'Expected parent node to be a CollapsibleContainerNode',
           );
-          collapsibleContainer.toggleOpen();
+          // collapsibleContainer.toggleOpen();
         });
       });
     }
@@ -98,30 +98,25 @@ export class CollapsibleTitleNode extends ElementNode {
     };
   }
 
-  insertNewAfter(_: RangeSelection, restoreSelection = true): ElementNode {
+  insertNewAfter(_: RangeSelection): ElementNode {
     const containerNode = this.getParentOrThrow();
 
     if (!$isCollapsibleContainerNode(containerNode)) {
       throw new Error('CollapsibleTitleNode expects to be child of CollapsibleContainerNode');
     }
 
-    if (containerNode.getOpen()) {
-      const contentNode = this.getNextSibling();
-      if (!$isCollapsibleContentNode(contentNode)) {
-        throw new Error('CollapsibleTitleNode expects to have CollapsibleContentNode sibling');
-      }
+    // if (containerNode.getOpen()) {
+    const contentNode = this.getNextSibling();
+    if (!$isCollapsibleContentNode(contentNode)) {
+      throw new Error('CollapsibleTitleNode expects to have CollapsibleContentNode sibling');
+    }
 
-      const firstChild = contentNode.getFirstChild();
-      if ($isElementNode(firstChild)) {
-        return firstChild;
-      } else {
-        const paragraph = $createParagraphNode();
-        contentNode.append(paragraph);
-        return paragraph;
-      }
+    const firstChild = contentNode.getFirstChild();
+    if ($isElementNode(firstChild)) {
+      return firstChild;
     } else {
       const paragraph = $createParagraphNode();
-      containerNode.insertAfter(paragraph, restoreSelection);
+      contentNode.append(paragraph);
       return paragraph;
     }
   }

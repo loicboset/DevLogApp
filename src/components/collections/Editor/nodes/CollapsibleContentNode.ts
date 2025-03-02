@@ -10,16 +10,16 @@ import {
 } from 'lexical';
 
 import { $isCollapsibleContainerNode } from './CollapsibleContainerNode';
-import { domOnBeforeMatch, setDomHiddenUntilFound } from '../plugins/CollapsiblePlugin/CollapsibleUtils';
+import { domOnBeforeMatch } from '../plugins/CollapsiblePlugin/CollapsibleUtils';
 import { IS_CHROME } from '../utils/environment';
 import invariant from '../utils/invariant';
 
 type SerializedCollapsibleContentNode = SerializedElementNode;
 
 type ContentConversionDetails = {
-  conversion: (domNode: HTMLElement) => DOMConversionOutput | null
-  priority: 0 | 1 | 2 | 3 | 4 | undefined
-}
+  conversion: (domNode: HTMLElement) => DOMConversionOutput | null;
+  priority: 0 | 1 | 2 | 3 | 4 | undefined;
+};
 
 export function $convertCollapsibleContentElement(): DOMConversionOutput | null {
   const node = $createCollapsibleContentNode();
@@ -44,9 +44,9 @@ export class CollapsibleContentNode extends ElementNode {
       editor.getEditorState().read(() => {
         const containerNode = this.getParentOrThrow();
         invariant($isCollapsibleContainerNode(containerNode), 'Expected parent node to be a CollapsibleContainerNode');
-        if (!containerNode.__open) {
-          setDomHiddenUntilFound(dom);
-        }
+        // if (!containerNode.__open) {
+        //   setDomHiddenUntilFound(dom);
+        // }
       });
       domOnBeforeMatch(dom, () => {
         editor.update(() => {
@@ -55,9 +55,9 @@ export class CollapsibleContentNode extends ElementNode {
             $isCollapsibleContainerNode(containerNode),
             'Expected parent node to be a CollapsibleContainerNode',
           );
-          if (!containerNode.__open) {
-            containerNode.toggleOpen();
-          }
+          // if (!containerNode.__open) {
+          //   containerNode.toggleOpen();
+          // }
         });
       });
     }
@@ -70,7 +70,7 @@ export class CollapsibleContentNode extends ElementNode {
 
   static importDOM(): DOMConversionMap | null {
     return {
-      div: (domNode: HTMLElement): ContentConversionDetails | null  => {
+      div: (domNode: HTMLElement): ContentConversionDetails | null => {
         if (!domNode.hasAttribute('data-lexical-collapsible-content')) {
           return null;
         }
