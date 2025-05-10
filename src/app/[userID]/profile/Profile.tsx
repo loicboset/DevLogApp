@@ -4,7 +4,10 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
+import WeeklyPlanner from "@/components/collections/WeeklyPlanner";
+
 import PersonalInfo from "./_parts/PersonalInfo";
+import PushNotification from "./_parts/PushNotifications"
 import SettingsToggles from "./_parts/SettingsToggles";
 
 type Props = {
@@ -72,6 +75,9 @@ const Profile = ({ email }: Props): React.ReactElement => {
             {/* PERSONAL INFO */}
             <PersonalInfo />
           </div>
+          <hr className="border-gray-500 mb-6" />
+          <PushNotification />
+          <WeeklyPlanner />
           <hr className="border-gray-500 mb-6" />
           <SettingsToggles />
         </div>

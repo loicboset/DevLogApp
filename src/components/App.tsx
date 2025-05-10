@@ -6,13 +6,19 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 
 import Editor from "@/components/collections/Editor";
 import { useCalendarContext } from "@/context/CalendarContextProvider";
+import { PushNotificationsPlugin } from "@/packages";
 
 import AppWrapper from "./collections/AppWrapper";
 import MotivationBooster from "./collections/MotivationBooster";
 import NavBar from "./collections/NavBar";
+import ScreenSizeRenderer from "./ui/wrappers/ScreenSizeRenderer";
 
 type Props = {
   userID: string;
+}
+
+type ExtendedNavigator = Navigator & {
+  standalone?: boolean;
 }
 
 const App = ({ userID }: Props): React.ReactElement => {
@@ -24,9 +30,24 @@ const App = ({ userID }: Props): React.ReactElement => {
 
   const handleSetSidebarOpen = (open: boolean): void => setSidebarOpen(open);
 
+  // VARS
+  let displayMode = "browser";
+  const mqStandAlone = "(display-mode: standalone)";
+  if (
+    (window.navigator as ExtendedNavigator)?.standalone ||
+    window.matchMedia(mqStandAlone).matches
+  ) {
+    displayMode = "standalone";
+  }
+
   return (
     <>
       <NavBar sidebarOpen={sidebarOpen} handleSetSidebarOpen={handleSetSidebarOpen} />
+      {displayMode === "standalone" && (
+        <ScreenSizeRenderer maxWidth="md">
+          <PushNotificationsPlugin />
+        </ScreenSizeRenderer>
+      )}
       <div className="w-full focus:outline-none flex flex-col p-8 pb-12">
         <div className="mb-8 pb-2 border-b border-gray-500">
           <div className="flex items-center space-x-2 mb-2">
