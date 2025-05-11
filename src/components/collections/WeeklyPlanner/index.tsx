@@ -14,10 +14,8 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 
 const WeeklyPlanner = (): React.ReactElement => {
   // TODO: use persisted state for reminders instead of useState - handle reminders model?
-  // TODO: improve UX
-  // TODO: implement test push notifications endpoint
-  // TODO: debug why swk not working in local
   // TODO: implement logic to send push notifications at the time set by the reminders in the weekly planner
+  // TODO: improve UX
   const [reminders, setReminders] = useState<Record<string, Reminder[]>>({});
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [pickerTime, setPickerTime] = useState<Date | null>(null);

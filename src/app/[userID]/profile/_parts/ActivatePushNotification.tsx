@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import Button from '@/components/ui/buttons/Button';
-import sendTestNotifications from '@/worker/utils/sendTestNotification';
 
 import usePushNotificationsManager from './PushNotifications/usePushNotificationManager';
 
@@ -22,7 +21,7 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
   }, []);
 
   // METHODS
-  const testNotification = () => {
+  const testNotification = (): void => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission().then(permission => {
         if (permission === 'granted') {
