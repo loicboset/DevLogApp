@@ -4,11 +4,8 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-import WeeklyPlanner from "@/components/collections/WeeklyPlanner";
-
+import Features from "./_parts/Features";
 import PersonalInfo from "./_parts/PersonalInfo";
-import PushNotification from "./_parts/PushNotifications"
-import SettingsToggles from "./_parts/SettingsToggles";
 
 type Props = {
   email: string;
@@ -17,7 +14,7 @@ type Props = {
 const Profile = ({ email }: Props): React.ReactElement => {
 
   return (
-    <div className="h-screen">
+    <div className="pb-10">
       <div className='flex p-4 backdrop-blur-xs justify-between items-center sticky top-0 z-10 border-b border-gray-900'>
         <Link href="/">
           <h1 className='text-3xl text-indigo-500'>DevLog</h1>
@@ -43,7 +40,7 @@ const Profile = ({ email }: Props): React.ReactElement => {
 
           <div className="space-y-12">
             {/* ACCOUNT INFO */}
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 md:pb-6 md:grid-cols-3">
               <div>
                 <h2 className="text-base/7 font-semibold text-white">Account</h2>
                 <p className="mt-1 text-sm/6 text-gray-400">
@@ -72,14 +69,17 @@ const Profile = ({ email }: Props): React.ReactElement => {
               </div>
             </div>
 
+            <hr className="border-gray-500 mb-6" />
+
             {/* PERSONAL INFO */}
             <PersonalInfo />
+            <hr className="border-gray-500 mb-6" />
+
+            <Features />
           </div>
-          <hr className="border-gray-500 mb-6" />
-          <PushNotification />
+          {/* <PushNotification />
           <WeeklyPlanner />
-          <hr className="border-gray-500 mb-6" />
-          <SettingsToggles />
+          <SettingsToggles /> */}
         </div>
       </div>
     </div>

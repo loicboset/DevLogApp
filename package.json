@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --experimental-https",
+    "dev": "next dev --turbopack",
     "build": "npm run test && next build",
     "start": "next start",
     "lint": "next lint",
@@ -38,7 +38,6 @@
     "next-pwa": "^5.6.0",
     "openai": "^4.87.4",
     "react": "^19.0.0",
-    "react-datepicker": "^8.3.0",
     "react-day-picker": "^9.6.4",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
