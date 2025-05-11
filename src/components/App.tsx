@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
@@ -29,6 +29,20 @@ const App = ({ userID }: Props): React.ReactElement => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleSetSidebarOpen = (open: boolean): void => setSidebarOpen(open);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      registerServiceWorker()
+    }
+  }, [])
+
+  const registerServiceWorker = async (): Promise<void> => {
+    await navigator.serviceWorker.register('./sw.js', {
+      scope: '/',
+      updateViaCache: 'none',
+    })
+  }
+
 
   // VARS
   let displayMode = "browser";

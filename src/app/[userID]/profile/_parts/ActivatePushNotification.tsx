@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import Button from '@/components/ui/buttons/Button';
+import sendTestNotifications from '@/worker/utils/sendTestNotification';
 
 import usePushNotificationsManager from './PushNotifications/usePushNotificationManager';
 
 export const ActivatePushNotification = (): React.ReactElement | null => {
   // STATE
   const [permission, setPermission] = useState<NotificationPermission | null>(null);
+  console.log(' permission', permission);
 
   // HOOKS
   const { pushSubscription, subscribeDevice } =
@@ -19,14 +21,32 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
     }
   }, []);
 
+  // METHODS
+  const testNotification = () => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification('Hello from a notification!');
+        }
+      });
+    } else {
+      console.log('test')
+      new Notification('Hello from a notification!');
+    }
+  };
+
   const grantPermission = (): void => {
     Notification.requestPermission().then((perm) => {
       setPermission(perm);
+      console.log('perm', perm);
       if (perm === 'granted') {
-        new Notification('You can receive notifications now!');
+        // new Notification('You can receive notifications now!');
+        console.log('condition', 'serviceWorker' in navigator)
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.ready.then(async (registration) => {
-            await registration.pushManager.getSubscription();
+            console.log('registration', registration);
+            // console.log('registration.pushManager', registration.pushManager.subscribe());
+            // await registration.pushManager.getSubscription();
             if (!pushSubscription) {
               await subscribeDevice();
             }
@@ -50,5 +70,9 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
     );
   }
 
-  return null
+  return (
+    <Button className="text-sm" onClick={testNotification}>
+      Test
+    </Button>
+  );
 }
