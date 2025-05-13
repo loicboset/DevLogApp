@@ -1,6 +1,5 @@
-import WeeklyPlanner from "@/components/collections/WeeklyPlanner";
-
 import { ActivatePushNotification } from "../ActivatePushNotification"
+import WeeklyPlanner from "./WeeklyPlanner";
 
 const PushNotification = (): React.ReactElement => {
   return (

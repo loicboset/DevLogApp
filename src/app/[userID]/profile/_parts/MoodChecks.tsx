@@ -11,7 +11,7 @@ const MoodChecks = (): React.ReactElement => {
   const { user } = useUserContext();
 
   // RQ
-  const { data: settings } = useUserSettings(user?.userID);
+  const { data: settings } = useUserSettings();
   const { mutate: editUserSettings } = useUpsertUserSettings();
 
   // METHODS
@@ -30,7 +30,7 @@ const MoodChecks = (): React.ReactElement => {
         </span>
         <InfoTooltip message='Toggle on to get personalied daily motivation boosters based on your mood levels to help with your writing!' />
       </div>
-      <Toggle state={isMoodChecksEnabled} toggleSwitch={handleToggleMoodChecks} />
+      <Toggle enabled={isMoodChecksEnabled} onChange={handleToggleMoodChecks} />
     </div>
   );
 };

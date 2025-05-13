@@ -19,7 +19,7 @@ const PersonalInfo = (): React.ReactElement => {
   const { user } = useUserContext();
 
   // RQ
-  const { data: settings } = useUserSettings(user?.userID);
+  const { data: settings } = useUserSettings();
   const { mutate: editUserSettings } = useUpsertUserSettings();
 
   // RHF

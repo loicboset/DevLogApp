@@ -1,16 +1,16 @@
 import { useMutation, useQuery, useQueryClient, UseQueryResult, UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
 
-import { UserSettings } from "@/types/api/user_settings";
+import { UserPushNotification } from "@/types/api/user_push_notifications";
 import { UpsertUserPushNotif } from "@/types/payload/user_push_notifications";
 
 // GET USER PUSH NOTIFICATIONS
-const getuserPushNotifications = async (): Promise<UserSettings> => {
+const getuserPushNotifications = async (): Promise<UserPushNotification[]> => {
   const { data } = await axios.get(`/api/user_push_notifications`);
   return data;
 };
 
-const useUserPushNotifications = (): UseQueryResult<UserSettings, Error> => {
+const useUserPushNotifications = (): UseQueryResult<UserPushNotification[], Error> => {
   return useQuery({ queryKey: ["user_push_notifications"], queryFn: () => getuserPushNotifications() });
 };
 

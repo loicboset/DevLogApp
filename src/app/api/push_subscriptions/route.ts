@@ -17,8 +17,12 @@ export async function PUT(request: Request): Promise<Response> {
   const supabase = await createClient();
 
   const req = await request.json();
+
   const { user_id, endpoint, auth, p256dh, browser, os } = req as UpsertPushSubscriptionPayload;
-  const { data, error } = await supabase.from("push_subscriptions").upsert({ user_id, endpoint, auth, p256dh, browser, os }).select();
+  const { data, error } = await supabase
+    .from("push_subscriptions")
+    .upsert({ user_id, endpoint, auth, p256dh, browser, os })
+    .select();
 
   if (error) {
     return new Response("Error creating push subscription", { status: 500 });

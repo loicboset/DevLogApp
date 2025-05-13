@@ -6,16 +6,15 @@
   function, the isSubscribing state, the testDeviceNotification function, and the sendTestNotifications function.
 */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-import { UAParser } from 'ua-parser-js';
+import { UAParser } from "ua-parser-js";
 
-
-import { useUserContext } from '@/context/UserProvider';
-import subscribePushNotification from '@/packages/PushNotifications/utils/subscribePushNotification';
-import { usePushSubscriptions, useUpsertPushSubscription } from '@/services/push_subscriptions';
-import { UserPushSubscription } from '@/types/api/push_subscriptions';
-import sendTestNotifications from '@/worker/utils/sendTestNotification';
+import { useUserContext } from "@/context/UserProvider";
+import subscribePushNotification from "@/packages/PushNotifications/utils/subscribePushNotification";
+import { usePushSubscriptions, useUpsertPushSubscription } from "@/services/push_subscriptions";
+import { UserPushSubscription } from "@/types/api/push_subscriptions";
+import sendTestNotifications from "@/worker/utils/sendTestNotification";
 
 type ReturnUseSWManager = {
   swState: ServiceWorkerState | null;
@@ -39,8 +38,10 @@ const usePushNotificationsManager = (): ReturnUseSWManager => {
 
   // METHODS
   const subscribeDevice = useCallback(async (): Promise<void> => {
+    console.log("subscribeDevice", subscribeDevice);
     const { browser, os } = new UAParser(navigator.userAgent).getResult();
     const subscription = await subscribePushNotification();
+    console.log(" subscription", subscription);
 
     const auth = subscription.toJSON().keys?.auth;
     const p256dh = subscription.toJSON().keys?.p256dh;
@@ -51,8 +52,8 @@ const usePushNotificationsManager = (): ReturnUseSWManager => {
       endpoint: subscription.endpoint,
       auth,
       p256dh,
-      browser: browser.name || 'unknown',
-      os: os.name || 'unknown',
+      browser: browser.name || "unknown",
+      os: os.name || "unknown",
     });
   }, [createUserSubscription, user.userID]);
 
@@ -60,7 +61,7 @@ const usePushNotificationsManager = (): ReturnUseSWManager => {
   // Get the service worker registration and set the state
   useEffect(() => {
     navigator.serviceWorker
-      .getRegistration('/')
+      .getRegistration("/")
       .then((registration) => {
         let serviceWorker;
         if (registration?.installing) {
@@ -68,29 +69,29 @@ const usePushNotificationsManager = (): ReturnUseSWManager => {
           serviceWorker.onstatechange = (e): void => {
             if (e.target) setSwState((e.target as ServiceWorker).state);
           };
-          setSwState('installing');
+          setSwState("installing");
         } else if (registration?.waiting) {
           serviceWorker = registration.waiting;
-          setSwState('installed');
+          setSwState("installed");
         } else if (registration?.active) {
           serviceWorker = registration.active;
-          setSwState('activated');
+          setSwState("activated");
         }
 
-        registration?.addEventListener('updatefound', (e) => {
+        registration?.addEventListener("updatefound", (e) => {
           const sw = e.currentTarget as ServiceWorkerRegistration;
-          if (sw.active) setSwState('activated');
-          if (sw.waiting) setSwState('installed');
+          if (sw.active) setSwState("activated");
+          if (sw.waiting) setSwState("installed");
           if (sw.installing) {
             sw.installing.onstatechange = (event): void => {
               if (event.target) setSwState((event.target as ServiceWorker).state);
             };
-            setSwState('installing');
+            setSwState("installing");
           }
         });
       })
       .catch((err) => {
-        console.error('Error getting service worker registration:', err);
+        console.error("Error getting service worker registration:", err);
       });
   }, []);
 

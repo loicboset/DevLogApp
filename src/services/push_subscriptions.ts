@@ -18,11 +18,17 @@ const usePushSubscriptions = (): UseQueryResult<PushSubscription[], Error> => {
 
 // ------ UPSERT PUSH SUBSCRIPTION ------
 const upsertPushSubscription = async (payload: UpsertPushSubscriptionPayload): Promise<UserPushSubscription> => {
-  const { data } = await axios.post(`/api/push_subscriptions`, payload);
+  console.log("PUT!!!");
+  const { data } = await axios.put(`/api/push_subscriptions`, payload);
   return data;
 };
 
-const useUpsertPushSubscription = (): UseMutationResult<UserPushSubscription, Error, UpsertPushSubscriptionPayload, unknown> => {
+const useUpsertPushSubscription = (): UseMutationResult<
+  UserPushSubscription,
+  Error,
+  UpsertPushSubscriptionPayload,
+  unknown
+> => {
   const queryClient = useQueryClient();
 
   return useMutation({

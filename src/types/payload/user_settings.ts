@@ -6,4 +6,8 @@ type UpsertUserSettings = {
   mood_checks_enabled: boolean;
 };
 
-export type { UpsertUserSettings };
+type EditIsPushNotificationActive = {
+  is_push_notifications_active: boolean;
+};
+
+export type { UpsertUserSettings, EditIsPushNotificationActive };

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import Toggle from '@/components/ui/Toggle';
 import InfoTooltip from '@/components/ui/tooltips/InfoTooltip';
+import { useTogglePushNotification, useUserSettings } from '@/services/user_settings';
 
 import usePushNotificationsManager from './PushNotifications/usePushNotificationManager';
 
@@ -11,9 +12,13 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
   const [permission, setPermission] = useState<NotificationPermission | null>(null);
   console.log(' permission', permission);
 
+  // RQ
+  const { data: userSettings } = useUserSettings();
+  const { mutate: togglePushNotification } = useTogglePushNotification();
+
+
   // HOOKS
-  const { pushSubscription, subscribeDevice } =
-    usePushNotificationsManager();
+  const { subscribeDevice } = usePushNotificationsManager();
 
   // EFFECTS
   useEffect(() => {
@@ -23,21 +28,25 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
   }, []);
 
   // METHODS
-  const grantPermission = (): void => {
+  const grantPermission = (checked: boolean): void => {
+    togglePushNotification({ is_push_notifications_active: checked });
+    return;
+
+    // togglePushNotification();
+
     Notification.requestPermission().then((perm) => {
       setPermission(perm);
-      console.log('perm', perm);
       if (perm === 'granted') {
         // new Notification('You can receive notifications now!');
-        console.log('condition', 'serviceWorker' in navigator)
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.ready.then(async (registration) => {
-            console.log('registration', registration);
             // console.log('registration.pushManager', registration.pushManager.subscribe());
-            // await registration.pushManager.getSubscription();
-            if (!pushSubscription) {
-              await subscribeDevice();
-            }
+            const sub = await registration.pushManager.getSubscription();
+            if (sub) await sub.unsubscribe();
+            // if (!pushSubscription) {
+            console.log('subscribeDevice...')
+            await subscribeDevice();
+            // }
           });
         }
       }
@@ -66,7 +75,7 @@ export const ActivatePushNotification = (): React.ReactElement | null => {
         </span>
         <InfoTooltip message='Never forget to journal by receiving reminders at the time that suits you best.' />
       </div>
-      <Toggle state={true} toggleSwitch={grantPermission} />
+      <Toggle enabled={!!userSettings?.is_push_notifications_active} onChange={grantPermission} />
     </div>
   );
 }
